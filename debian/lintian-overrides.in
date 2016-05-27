@@ -1,0 +1,2 @@
+# debconf is optional, for nicer fail messages
+&NAME&-support: missing-debconf-dependency-for-preinst

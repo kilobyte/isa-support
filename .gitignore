@@ -1,0 +1,11 @@
+*~
+/debian/control
+/debian/*-support.preinst
+/debian/*-support.templates
+/debian/*debhelper*
+/debian/*-support.lintian-overrides
+/debian/*-support.substvars
+/debian/files
+/debian/*-support/
+/debian/po/templates.pot
+test-*

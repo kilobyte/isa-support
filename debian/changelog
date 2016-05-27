@@ -1,0 +1,5 @@
+isa-support (1) unstable; urgency=medium
+
+  * Initial release (Closes: #823672)
+
+ -- Adam Borowski <kilobyte@angband.pl>  Fri, 27 May 2016 07:06:32 +0200

@@ -1,0 +1,26 @@
+# Recognized fields:
+# "Name": the isa extension name, the package will be ${Name}-support
+# "Architecture": archs to build the package on, wildcards are ok
+# "Test": how to detect it, defaults to return !__builtin_cpu_supports("$Name");
+#     If the test program dies (SIGILL/etc), that's ok, the answer is "no".
+
+Name: sse2
+Architecture: any-i386
+
+Name: sse3
+Architecture: any-i386 any-amd64
+
+Name: sse4.2
+Architecture: any-i386 any-amd64
+
+Name: altivec
+Architecture: powerpc
+Test: asm("vsldoi %v1,%v1,%v1,0");
+# gcc-6 has __builtin_cpu_supports("altivec") but it's not reliable: silently
+# gives wrong answer on qemu, wrong versions of glibc, non-glibc, etc.
+# Thus, let's use SIGILL instead.
+
+Name: neon
+Architecture: armhf
+CFLAGS: -mfpu=neon
+Test: asm("VMUL.I16 q0,q0,q1");

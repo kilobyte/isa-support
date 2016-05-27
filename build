@@ -1,0 +1,73 @@
+#!/usr/bin/perl -w
+undef $/;
+
+sub file_replace($)
+{
+    my $f=$_[0];
+    open IN, "<debian/$f.in" or die "Can't read debian/$f.in: $!\n";
+    local $_=<IN>;
+    close IN;
+
+    s/&NAME&/$name/g;
+    s/&UUENCODED&/$uue/g;
+    open OUT, ">debian/$name-support.$f"
+        or die "Can't write debian/$name-support.$f: $!\n";
+    print OUT;
+    close OUT;
+}
+
+
+open IN, "<debian/control.in" or die "Can't read debian/control.in: $!\n";
+$_=<IN>;
+close IN;
+my @control_in = grep !/^\s*$/s, split /\n\s*\n/s;
+die "There should be 2 entries in debian/control.in\n" unless $#control_in==1;
+my $control="$control_in[0]\n";
+
+open ISA_LIST, "<isa-list" or die "Can't read isa-list: $!\n";
+$_=<ISA_LIST>;
+close ISA_LIST;
+
+for (split /\n\s*\n/s)
+{
+    s/^#.*//gm;
+    next if /^\s*$/s;
+    my %field;
+    $field{$1}=$2 while (/\G^([!-9;-~]+):[ \t]*((?:[^\n]|\n[ \t]+)+)\n?/gsm);
+
+    $name=$field{'Name'};
+    $name=~/^[a-z0-9\.+_]+$/ or die "Bad package/isa name: \"$name\".\n";
+
+    $control.="\n".$control_in[1]=~s/&NAME&/$name/gr
+            ."Architecture: $field{'Architecture'}\n";
+
+    for (split /\s+/, $field{'Architecture'})
+    {
+        goto ARCH_OK unless system "dpkg-architecture", "-i", $_;
+    }
+    print "$name: not on arch list, skipping.\n";
+    next;
+
+ARCH_OK:
+    print "Building $name...\n";
+    open C, '>', "test-$name.c";
+    my $test=$field{'Test'}//"return !__builtin_cpu_supports(\"$name\");";
+    print C <<END;
+int main()
+{
+    $test;
+    return 0;
+}
+END
+    close C;
+    system("cc", "-Wall", split(/ /, $field{'CFLAGS'}//""), "-s", "test-$name.c", "-o", "test-$name")
+        and die "Compile failed, aborting.\n";
+    $uue=`gzip -9 <test-$name|uuencode meow` or die "Uuencode failed.\n";
+    $uue=~s/^begin \d\d\d meow\n//s or die "Uuencode output corrupted.\n";
+
+    file_replace $_ for qw(preinst templates lintian-overrides);
+}
+
+open CONTROL, ">debian/control" or die "Can't write to debian/control: $!\n";
+print CONTROL $control;
+close CONTROL;

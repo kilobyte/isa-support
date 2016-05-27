@@ -1,0 +1,15 @@
+Source: isa-support
+Section: misc
+Priority: optional
+Maintainer: Adam Borowski <kilobyte@angband.pl>
+Build-Depends: debhelper (>=9), sharutils
+Standards-Version: 3.9.8
+#Vcs-Git:
+#Vcs-Browser:
+
+Package: &NAME&-support
+Priority: optional
+Description: prevent installation on processors without required instructions
+ This is a mostly dummy package, whose only purpose is to detect the presence
+ of &NAME&.  It refuses to install on inadequate processors, thus allowing
+ specifying such a requirement as a dependency.

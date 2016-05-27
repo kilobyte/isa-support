@@ -1,0 +1,47 @@
+#!/bin/bash
+#dash is fine, too (ulimit)
+set -e
+
+if [ "$1" = install -o "$1" = upgrade ]; then
+    # Writing to /usr/lib is nasty but some folks mount everything noexec.
+    FILE=`mktemp /usr/lib/&NAME&-support.XXXXXXXXXX`
+    trap "rm -f '$FILE'" EXIT
+    perl <<'END' |gzip -cdf >"$FILE"
+binmode STDOUT;
+print unpack "u*", <<'end';
+&UUENCODED&
+END
+    chmod u+x "$FILE"
+    # "exec >;command" instead of "command >" looks strange but regular
+    # redirections don't fully work within qemu-user.
+    ret=0;(ulimit -c 0; exec >/dev/null 2>&1; "$FILE") || ret=$?
+    rm -f "$FILE"
+    trap - EXIT
+
+    # 126 is "not executable", most likely due to foreign multi-arch without
+    # qemu.  In that case, let's allow installation.
+    if [ $ret -ne 0 -a $ret -ne 126 ]; then
+        # Fail noisily, first via debconf (if installed).
+        if [ -e /usr/share/debconf/confmodule ]; then
+
+            . /usr/share/debconf/confmodule
+            db_version 2.0
+
+            db_fset &NAME&-support/fail seen false ||:
+            db_reset &NAME&-support/fail ||:
+            db_input critical &NAME&-support/fail ||:
+            db_go ||:
+            db_stop ||:
+        fi
+
+        cat >&2 <<END
+This machine doesn't support &NAME&, sorry.
+Aborting.
+END
+        exit 2
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0

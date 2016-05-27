@@ -1,0 +1,4 @@
+debian/*-support.preinst
+debian/*-support.templates
+debian/*-support.lintian-overrides
+test-*
