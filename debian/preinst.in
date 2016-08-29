@@ -1,5 +1,5 @@
 #!/bin/bash
-#dash is fine, too (ulimit)
+#dash is fine, too, but not general /bin/sh (ulimit)
 set -e
 
 if [ "$1" = install -o "$1" = upgrade ]; then
@@ -18,9 +18,24 @@ END
     rm -f "$FILE"
     trap - EXIT
 
-    # 126 is "not executable", most likely due to foreign multi-arch without
-    # qemu.  In that case, let's allow installation.
-    if [ $ret -ne 0 -a $ret -ne 126 ]; then
+    if [ $ret -ne 0 -a -n "$IGNORE_ISA" ]; then
+        cat >&2 <<END
+This machine doesn't support &NAME&, but override (IGNORE_ISA) is enabled.
+Continuing...
+END
+	ret=0
+    fi
+
+    if [ $ret -eq 126 ]; then
+        cat >&2 <<END
+Couldn't execute test binary for &NAME&, you either do foreign multi-arch
+without qemu or do something strange.  Assuming you know what you're doing.
+Continuing...
+END
+	ret=0
+    fi
+
+    if [ $ret -ne 0 ]; then
         # Fail noisily, first via debconf (if installed).
         if [ -e /usr/share/debconf/confmodule ]; then
 

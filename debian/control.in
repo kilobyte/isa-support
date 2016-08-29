@@ -13,3 +13,5 @@ Description: prevent installation on processors without required instructions
  This is a mostly dummy package, whose only purpose is to detect the presence
  of &NAME&.  It refuses to install on inadequate processors, thus allowing
  specifying such a requirement as a dependency.
+ .
+ The test can be overridden by a non-empty IGNORE_ISA env variable.
