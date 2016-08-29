@@ -65,6 +65,15 @@ END
     $uue=`gzip -9 <test-$name|uuencode meow` or die "Uuencode failed.\n";
     $uue=~s/^begin \d\d\d meow\n//s or die "Uuencode output corrupted.\n";
 
+    unlink "debian/substvars";
+    system("dpkg-shlibdeps", "test-$name") and die "dpkg-shlibdeps failed.\n";
+    open SVARS, "<", "debian/substvars" or die "Can't read debian/substvars: $!\n";
+    $_=<SVARS>;
+    close SVARS;
+    unlink "debian/substvars";
+    /^shlibs:Depends=([^\n]*)$/m or die "Can't find Depends in substvars.\n";
+    $control.="Pre-Depends: $1\n";
+
     file_replace $_ for qw(preinst templates lintian-overrides);
 }
 

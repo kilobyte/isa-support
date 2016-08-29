@@ -3,3 +3,6 @@
 # There's no risk of failing to grab a new dependency in the future as an
 # empty (save for preinst) package has no needs.
 isa-support source: debhelper-but-no-misc-depends
+
+# It's not hardcoded, we just do _Pre_-Depends rather than Depends.
+isa-support source: package-depends-on-hardcoded-libc
