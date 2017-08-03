@@ -74,7 +74,7 @@ END
     /^shlibs:Depends=([^\n]*)$/m or die "Can't find Depends in substvars.\n";
     $control.="Pre-Depends: $1\n";
 
-    file_replace $_ for qw(preinst templates lintian-overrides);
+    file_replace $_ for qw(preinst templates lintian-overrides docs);
 }
 
 open CONTROL, ">debian/control" or die "Can't write to debian/control: $!\n";
