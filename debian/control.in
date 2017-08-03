@@ -4,8 +4,8 @@ Priority: optional
 Maintainer: Adam Borowski <kilobyte@angband.pl>
 Build-Depends: debhelper (>=9), sharutils
 Standards-Version: 3.9.8
-#Vcs-Git:
-#Vcs-Browser:
+Vcs-Git: https://github.com/kilobyte/isa-support.git
+Vcs-Browser: https://github.com/kilobyte/isa-support/tree/master/
 
 Package: &NAME&-support
 Priority: optional
