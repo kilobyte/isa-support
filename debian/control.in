@@ -9,6 +9,7 @@ Vcs-Browser: https://github.com/kilobyte/isa-support/tree/master/
 
 Package: &NAME&-support
 Priority: optional
+Multi-Arch: foreign
 Description: prevent installation on processors without required instructions
  This is a mostly dummy package, whose only purpose is to detect the presence
  of &NAME&.  It refuses to install on inadequate processors, thus allowing
