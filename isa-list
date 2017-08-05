@@ -3,6 +3,7 @@
 # "Architecture": archs to build the package on, wildcards are ok
 # "Test": how to detect it, defaults to return !__builtin_cpu_supports("$Name");
 #     If the test program dies (SIGILL/etc), that's ok, the answer is "no".
+# CFLAGS: passed to the C compiler, can include link-time flags too.
 
 Name: sse2
 Architecture: any-i386
