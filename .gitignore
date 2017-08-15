@@ -5,7 +5,9 @@
 /debian/*debhelper*
 /debian/*-support.lintian-overrides
 /debian/*-support.substvars
+/debian/*-support.docs
 /debian/files
 /debian/*-support/
 /debian/po/templates.pot
+/debian/po.tmp
 test-*
