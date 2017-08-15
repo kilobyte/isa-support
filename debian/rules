@@ -7,3 +7,6 @@
 
 override_dh_auto_build:
 	./build
+
+override_dh_installdebconf:
+	dh_installdebconf -- --podir=debian/po.tmp

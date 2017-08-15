@@ -50,6 +50,7 @@ for (split /\n\s*\n/s)
 
 ARCH_OK:
     print "Building $name...\n";
+    push @isa, $name;
     open C, '>', "test-$name.c";
     my $test=$field{'Test'}//"return !__builtin_cpu_supports(\"$name\");";
     print C <<END;
@@ -80,3 +81,33 @@ END
 open CONTROL, ">debian/control" or die "Can't write to debian/control: $!\n";
 print CONTROL $control;
 close CONTROL;
+
+printf "Mangling translations...\n";
+mkdir "debian/po.tmp";
+opendir(my $POdir, "debian/po") || die "Can't opendir debian/po: $!\n";
+while (readdir $POdir)
+{
+    /\.po$/ or next;
+    print "• $_\n";
+    my $POfile = $_;
+
+    open PO, "<", "debian/po/$POfile" or die "Can't read debian/po/$POfile: $!\n";
+    $_=<PO>;
+    close PO;
+
+    open PO, ">", "debian/po.tmp/$POfile" or die "Can't write debian/po.tmp/$POfile: $!\n";
+    print PO;
+    for (split /\n\n/)
+    {
+        next unless /&NAME&/;
+        my $sect = $_;
+        for (@isa)
+        {
+            my $mangled = $sect;
+            $mangled =~ s/&NAME&/$_/g;
+            print PO "\n\n$mangled";
+        }
+    }
+    close PO;
+}
+closedir $POdir;
