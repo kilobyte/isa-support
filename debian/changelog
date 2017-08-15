@@ -1,3 +1,12 @@
+isa-support (2) unstable; urgency=medium
+
+  * Move the VCS to collab-maint.
+  * Machinery for substituting variables in debconf translations.
+  * Portuguese translation (Rui Branco).  Closes: #872176
+  * Polish translation (I forgot I know this language...).
+
+ -- Adam Borowski <kilobyte@angband.pl>  Tue, 15 Aug 2017 16:04:48 +0200
+
 isa-support (1) unstable; urgency=medium
 
   * Initial release (Closes: #823672)
