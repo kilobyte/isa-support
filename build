@@ -63,7 +63,7 @@ END
     close C;
     system("cc", "-Wall", split(/ /, $field{'CFLAGS'}//""), "-s", "test-$name.c", "-o", "test-$name")
         and die "Compile failed, aborting.\n";
-    $uue=`gzip -9 <test-$name|uuencode meow` or die "Uuencode failed.\n";
+    $uue=`gzip -9n <test-$name|uuencode meow` or die "Uuencode failed.\n";
     $uue=~s/^begin \d\d\d meow\n//s or die "Uuencode output corrupted.\n";
 
     unlink "debian/substvars";
