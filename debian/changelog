@@ -1,3 +1,11 @@
+isa-support (3) unstable; urgency=medium
+
+  * Make the build reproducible (Chris Lamb).  Closes: #872453
+  * German translation (Chris Leick).  Closes: #873378
+  * Dutch translation (Frans Spiesschaert).  Closes: #874283
+
+ -- Adam Borowski <kilobyte@angband.pl>  Mon, 04 Sep 2017 21:43:34 +0200
+
 isa-support (2) unstable; urgency=medium
 
   * Move the VCS to collab-maint.
