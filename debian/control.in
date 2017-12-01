@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Adam Borowski <kilobyte@angband.pl>
 Build-Depends: debhelper (>=10), sharutils, po-debconf
 Standards-Version: 4.1.0
+Rules-Requires-Root: no
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/isa-support.git
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/isa-support.git
 
