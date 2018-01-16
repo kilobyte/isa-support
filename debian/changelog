@@ -1,3 +1,13 @@
+isa-support (4) unstable; urgency=medium
+
+  * French translation (Jean-Pierre Giraud).  Closes: #875549
+  * Russian translation (Lev Lamberov).  Closes: #883205
+  * Brazilian translation (Raimundo Corrêa).  Closes: #887471
+  * Move the VCS to salsa.
+  * R³.
+
+ -- Adam Borowski <kilobyte@angband.pl>  Wed, 17 Jan 2018 00:52:58 +0100
+
 isa-support (3) unstable; urgency=medium
 
   * Make the build reproducible (Chris Lamb).  Closes: #872453
